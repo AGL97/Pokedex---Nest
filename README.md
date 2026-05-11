@@ -18,6 +18,12 @@
   docker-compose up -d
 ```
 
+5. Reconstruir la base de datos con la semilla (limite 300, el limite es configurable)
+
+```
+   curl --location 'http://localhost:3000/api/v2/seed/200'
+```
+
 ## Stack usado
 
 - MongoDB

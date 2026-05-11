@@ -4,6 +4,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { CommonModule } from './common/common.module';
 import { PokemonModule } from './pokemon/pokemon.module';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -16,6 +17,8 @@ import { PokemonModule } from './pokemon/pokemon.module';
     PokemonModule,
 
     CommonModule,
+
+    SeedModule,
   ],
   controllers: [],
   providers: [],
