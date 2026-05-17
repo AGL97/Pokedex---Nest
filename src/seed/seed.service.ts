@@ -4,24 +4,18 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import axios, { AxiosInstance } from 'axios';
 import { Model } from 'mongoose';
+import { AxiosAdapter } from 'src/common/adapters/axios.adapter';
 import { PokemonMapper } from 'src/common/mappers/pokemon.mapper';
 import { Pokemon } from 'src/pokemon/entities/pokemon.entity';
 import { PokeResponse } from './interfaces/poke-response.interface';
 
 @Injectable()
 export class SeedService {
-  private readonly API_URL: string = 'https://pokeapi.co/api/v2/pokemon';
-  private readonly api: AxiosInstance;
-
   constructor(
     @InjectModel(Pokemon.name) private readonly pokemonModel: Model<Pokemon>,
-  ) {
-    this.api = axios.create({
-      baseURL: this.API_URL,
-    });
-  }
+    private readonly http: AxiosAdapter,
+  ) {}
 
   private async checkIfDbIsEmpty(): Promise<boolean> {
     const count = await this.pokemonModel.countDocuments();
@@ -51,7 +45,7 @@ export class SeedService {
     }
 
     try {
-      const { data } = await this.api.get<PokeResponse>(`?limit=${limit}`);
+      const data = await this.http.get<PokeResponse>(`?limit=${limit}`);
       pokemons = data;
     } catch (error) {
       console.error('Error fetching data from the API:', error);
